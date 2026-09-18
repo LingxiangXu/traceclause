@@ -1,11 +1,40 @@
 # Contributing to TraceClause
 
-欢迎贡献可复现的问题、独立评测样例和小范围改进。
+Contributions are welcome, especially reproducible failures, independently annotated examples and focused improvements.
 
-1. 使用 Python 3.11+，创建虚拟环境并运行 `python -m pip install -e ".[dev]"`。
-2. 使用合成或已授权公开的文件复现问题；请勿上传客户合同、个人数据或密钥。
-3. 为行为变更添加有意义的测试，运行 `python -m pytest -q`。
-4. 改动检索行为时运行 `python benchmarks/evaluate.py`，记录失败和退化；不得通过删除困难样例美化指标。
-5. 在 PR 中说明问题、变更后的行为、验证结果及已知限制。
+## Getting started
 
-当前优先方向：漏提条款人工补录、独立评测集、同义改写检索、PDF 分栏/表格定位、约束抽取。新依赖应说明成本和必要性。前端保持无构建步骤，直到实际需要改变这一选择。
+Read the [user guide](docs/user-guide.md), [architecture](docs/architecture.md) and [roadmap](ROADMAP.md). Install Python 3.11+, create a virtual environment and run:
+
+```bash
+python -m pip install -e ".[dev]"
+python -m pytest -q
+```
+
+Use the [issue templates](https://github.com/LingxiangXu/traceclause/issues/new/choose) for bugs or suggestions. Include environment, minimal reproduction steps and expected versus actual behavior. Discuss large architecture changes first; small fixes can go directly to a PR.
+
+## Submitting changes
+
+1. Fork the repository and create a descriptive branch from main.
+2. Make the smallest change that addresses the issue.
+3. Add meaningful regression coverage for behavior changes and run relevant checks.
+4. Update affected documentation and examples.
+5. Open a PR against main using the provided template.
+
+Backend code is in traceclause/, frontend assets in traceclause/static/, and tests in tests/. Keep the frontend free of build steps until a concrete requirement justifies a change. Explain new dependencies and avoid unrelated refactoring.
+
+Documentation-only changes need content and link checks, not new application tests. Documentation is English; the current interface is Chinese. UI internationalization is separate work.
+
+Never commit virtual environments, databases, logs, customer documents, personal data or credentials. Use synthetic or explicitly authorized public reproduction files.
+
+## Evaluation contributions
+
+Run `python benchmarks/evaluate.py` for retrieval changes. Report regressions as well as improvements; never delete difficult examples to improve metrics. Provide sources and permissions, requirement text, relevant evidence and expected outcomes for new cases.
+
+See [evaluation notes](docs/evaluation.md). Priorities include omitted-clause correction, independent evaluation data, paraphrases, PDF references and constraint extraction.
+
+## Review, licensing and communication
+
+Changes are merged after maintainer review; no response time is guaranteed. Keep discussion respectful and focused on evidence.
+
+Only contribute material you are entitled to publish. Code contributions use the project's MIT license. For vulnerabilities follow [SECURITY.md](SECURITY.md), rather than publishing sensitive details in an issue.
