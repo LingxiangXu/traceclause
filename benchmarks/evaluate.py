@@ -1,5 +1,6 @@
 """Small transparent smoke benchmark, not evidence of real-world accuracy."""
 import json
+import sys
 from pathlib import Path
 from traceclause.matching import match_requirements
 from traceclause.parsing import parse_document, extract_requirements
@@ -23,4 +24,5 @@ def main():
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
     main()
