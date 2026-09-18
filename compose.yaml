@@ -1,0 +1,9 @@
+services:
+  traceclause:
+    build: .
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - traceclause-data:/app/data
+volumes:
+  traceclause-data:

@@ -1,0 +1,12 @@
+[
+  {"requirement":"系统应支持 Excel 批量导入设备台账。","evidence":["系统支持用户登录。","设备台账支持 Excel 批量导入。"],"expected_block":1,"expected_status":"candidate"},
+  {"requirement":"系统必须记录用户操作日志并支持按操作人查询。","evidence":["操作日志记录操作人，支持按操作人查询。","数据库支持自动备份。"],"expected_block":0,"expected_status":"candidate"},
+  {"requirement":"系统应支持按角色配置数据访问权限。","evidence":["设备信息可以编辑。","数据访问权限按角色配置。"],"expected_block":1,"expected_status":"candidate"},
+  {"requirement":"系统应提供维修工单状态流转与维修历史查询。","evidence":["维修工单支持状态流转，并提供维修历史查询。","系统支持按日期筛选。"],"expected_block":0,"expected_status":"candidate"},
+  {"requirement":"系统应支持离线录入。","evidence":["本版本不支持离线录入。","系统支持设备导出。"],"expected_block":0,"expected_status":"conflict"},
+  {"requirement":"系统应提供短信通知能力。","evidence":["设备可编辑。","数据库采用 PostgreSQL。"],"expected_block":null,"expected_status":"missing"},
+  {"requirement":"系统必须保存备份文件不少于 30 天。","evidence":["备份文件保存 7 天。","角色权限可以编辑。"],"expected_block":0,"expected_status":"candidate"},
+  {"requirement":"The system must export audit logs.","evidence":["Users can configure profile photos.","Export audit logs as CSV."],"expected_block":1,"expected_status":"candidate"},
+  {"requirement":"系统应支持消息实时推送。","evidence":["通知经由 WebSocket 即刻送达客户端。","用户可以修改密码。"],"expected_block":0,"expected_status":"candidate"},
+  {"requirement":"系统应提供身份认证能力。","evidence":["登录通过账号与口令校验完成。","文件保存为 CSV。"],"expected_block":0,"expected_status":"candidate"}
+]

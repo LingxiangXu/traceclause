@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "traceclause"
+version = "0.1.0"
+description = "Local document requirements and evidence review workbench"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "python-multipart>=0.0.20,<1", "pypdf>=6,<7", "python-docx>=1.2,<2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "httpx>=0.28,<1", "reportlab>=4,<5"]
+
+[tool.setuptools.package-data]
+traceclause = ["static/*", "samples/*"]
+
+[tool.setuptools.packages.find]
+include = ["traceclause*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>TraceClause · 有据</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="TraceClause 首页"
+        ><span class="brand-icon">▤</span
+        ><span>TraceClause<small>有据 · 文档证据核验</small></span></a
+      >
+      <button id="new-task" class="primary wide">＋ 新建核验任务</button>
+      <div class="nav-caption">工作空间</div>
+      <div class="nav-active">
+        <span>▦</span> 证据核验 <span class="nav-dot"></span>
+      </div>
+      <div class="history-head">
+        <span class="nav-caption">最近任务</span
+        ><button id="refresh-history" class="icon-button" aria-label="刷新任务">
+          ↻
+        </button>
+      </div>
+      <nav id="history" aria-label="历史任务"></nav>
+      <div class="sidebar-bottom">
+        <span class="local-dot"></span> 本地工作空间<small
+          >文件与复核记录保存在本机</small
+        >
+        <div class="version">开源版 <span>v0.1.0</span></div>
+      </div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div>工作空间 <span>/</span> <strong>证据核验</strong></div>
+        <div class="topbar-right">
+          <span class="quiet-label">LOCAL FIRST</span
+          ><button id="demo" class="subtle">体验演示数据 ↗</button>
+        </div>
+      </header>
+      <section class="page-heading">
+        <div>
+          <div class="eyebrow">DOCUMENT EVIDENCE WORKBENCH</div>
+          <h1>让每一项结论，都有据可查<span>。</span></h1>
+          <p>从要求到响应，再到原文证据。在同一处完成核对与复核。</p>
+        </div>
+        <button id="export-open" class="secondary" disabled>
+          ↓ 导出核验报告
+        </button>
+      </section>
+      <section id="welcome" class="welcome">
+        <div class="welcome-symbol">▤</div>
+        <div class="eyebrow">START WITH TWO DOCUMENTS</div>
+        <h2>把要求和响应，放在一起核对。</h2>
+        <p>
+          上传一份需求文件与一份技术方案，查找相关证据、记录复核依据，<br />生成可以回溯原文的核验报告。
+        </p>
+        <div class="welcome-actions">
+          <button id="welcome-new" class="primary">创建第一个核验任务 →</button
+          ><button id="welcome-demo" class="secondary">先看看演示</button>
+        </div>
+        <div class="steps">
+          <div>
+            <b>01</b><strong>导入文件</strong><span>PDF / DOCX / TXT / MD</span>
+          </div>
+          <div>
+            <b>02</b><strong>对照原文</strong><span>查看候选证据与缺口</span>
+          </div>
+          <div>
+            <b>03</b><strong>记录结论</strong
+            ><span>人工确认，保留复核依据</span>
+          </div>
+        </div>
+      </section>
+      <section id="workspace" hidden>
+        <div id="documents" class="documents"></div>
+        <div id="warnings" class="warnings" hidden></div>
+        <div id="stats" class="stats"></div>
+        <div class="workspace-caption">
+          <div>
+            <h2>条款核验</h2>
+            <span id="progress"></span>
+          </div>
+          <span class="method-note">词面检索提供候选 · 最终结论由你确认</span>
+        </div>
+        <div class="review-layout">
+          <section class="clause-panel">
+            <div class="list-tools">
+              <label class="search"
+                ><span>⌕</span
+                ><input
+                  id="search"
+                  placeholder="搜索要求条款…"
+                  aria-label="搜索要求条款" /></label
+              ><select id="filter" aria-label="筛选条款">
+                <option value="all">全部条款</option>
+                <option value="pending">待复核</option>
+                <option value="reviewed">已复核</option>
+                <option value="conflict">疑似冲突</option>
+                <option value="missing">未找到证据</option>
+              </select>
+            </div>
+            <div id="clause-list"></div>
+          </section>
+          <section
+            id="detail"
+            class="detail-panel"
+            aria-label="条款复核详情"
+          ></section>
+        </div>
+        <p class="footnote">
+          条款由规则自动提取，可能遗漏。请对照完整需求原文；相似度和词面覆盖率均不代表满足要求的概率。
+        </p>
+      </section>
+    </main>
+    <dialog id="upload-dialog">
+      <form id="upload-form">
+        <div class="dialog-heading">
+          <div>
+            <div class="eyebrow">NEW REVIEW</div>
+            <h2>新建核验任务</h2>
+          </div>
+          <button
+            type="button"
+            class="icon-button close-dialog"
+            aria-label="关闭"
+          >
+            ×
+          </button>
+        </div>
+        <p>选择需求文件与对应的方案或响应材料。</p>
+        <label class="upload-field"
+          ><b>01 · 需求文件</b><span>包含“必须”“应支持”等要求表述的文件</span
+          ><input
+            required
+            type="file"
+            name="requirement"
+            accept=".pdf,.docx,.txt,.md" /></label
+        ><label class="upload-field"
+          ><b>02 · 响应文件</b><span>技术方案、响应说明或验收材料</span
+          ><input
+            required
+            type="file"
+            name="response"
+            accept=".pdf,.docx,.txt,.md"
+        /></label>
+        <p class="hint">
+          每份最多 10 MB。支持文字型 PDF、DOCX、UTF-8 TXT / MD。扫描 PDF
+          需先进行 OCR。
+        </p>
+        <div class="dialog-actions">
+          <button type="button" class="secondary close-dialog">取消</button
+          ><button id="upload-submit" class="primary" type="submit">
+            导入并开始核验 →
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="source-dialog" class="source-dialog">
+      <div class="dialog-heading">
+        <div>
+          <div class="eyebrow">SOURCE DOCUMENT</div>
+          <h2 id="source-title"></h2>
+        </div>
+        <button class="icon-button close-dialog" aria-label="关闭">×</button>
+      </div>
+      <div id="source-body"></div>
+    </dialog>
+    <dialog id="export-dialog">
+      <div class="dialog-heading">
+        <div>
+          <div class="eyebrow">EXPORT REVIEW</div>
+          <h2>导出核验报告</h2>
+        </div>
+        <button class="icon-button close-dialog" aria-label="关闭">×</button>
+      </div>
+      <p>未复核的条款会明确标注“待复核”，不会自动判定为通过。</p>
+      <div class="export-options">
+        <a data-format="md"
+          ><b>Markdown 报告 ↗</b
+          ><span>要求、选定证据、人工依据与变更记录</span></a
+        ><a data-format="csv"
+          ><b>CSV 核验清单 ↗</b><span>便于在表格工具中筛选、整理</span></a
+        ><a data-format="json"
+          ><b>JSON 完整记录 ↗</b
+          ><span>全部原文、文件指纹、候选结果与复核历史</span></a
+        >
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
