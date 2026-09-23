@@ -1017,3 +1017,125 @@ dialog::backdrop {
     letter-spacing: 1.5px;
   }
 }
+
+/* v0.2 editing, localization and draft controls */
+#language,
+#report-language {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  color: var(--ink);
+  padding: 7px;
+  max-width: 115px;
+}
+.clause-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.draft-box {
+  background: #eff4e9;
+  border: 1px solid #d9e3cf;
+  border-radius: 7px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 12px;
+}
+.draft-box summary {
+  cursor: pointer;
+}
+.draft-box button {
+  display: block;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.audit blockquote {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-left: 2px solid var(--line);
+  overflow-wrap: anywhere;
+}
+#source-select {
+  min-height: 140px;
+}
+#clause-text {
+  min-height: 120px;
+}
+.span-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.span-fields input {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--line);
+  padding: 8px;
+  border-radius: 5px;
+  margin-top: 6px;
+}
+.report-language {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 12px;
+}
+#draft-content {
+  width: 100%;
+  min-height: 280px;
+  margin-top: 18px;
+  white-space: pre-wrap;
+}
+.warnings p {
+  color: inherit;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.warnings button {
+  margin-top: 10px;
+  font-size: 11px;
+}
+.evidence-head {
+  flex-wrap: wrap;
+}
+.review-actions {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.review-actions small {
+  max-width: 65%;
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .topbar > div:first-child {
+    display: none;
+  }
+  .topbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .workspace-caption {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .workspace-caption > div {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .workspace-caption h2 {
+    font-size: 14px;
+  }
+  .workspace-caption button {
+    font-size: 11px;
+    padding: 8px;
+  }
+  .stats .stat small {
+    display: block;
+    margin: 10px 0 0;
+  }
+  .span-fields {
+    grid-template-columns: 1fr;
+  }
+}

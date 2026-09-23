@@ -71,7 +71,7 @@ def parse_document(filename: str, content: bytes) -> dict:
             "sha256": sha256(content).hexdigest(), "blocks": blocks, "warnings": warnings}
 
 
-def extract_requirements(document: dict) -> list[dict]:
+def extract_requirements(document: dict, allow_empty: bool = False) -> list[dict]:
     """Heuristic extraction; retain exact text and offsets for auditability."""
     clauses = []
     marker = re.compile(r"应当|应支持|应提供|应具备|应实现|应记录|应保存|应满足|必须|须|需支持|要求|不得|至少|不少于|不超过|支持|\b(?:must|shall|required)\b", re.I)
@@ -82,7 +82,7 @@ def extract_requirements(document: dict) -> list[dict]:
                 start = match.start() + len(match.group()) - len(match.group().lstrip())
                 clauses.append({"id": len(clauses), "text": text, "block_id": block["id"],
                                 "location": block["location"], "start": start, "end": start + len(text)})
-    if not clauses:
+    if not clauses and not allow_empty:
         raise ValueError("未识别出要求条款。请使用包含“必须”“应支持”“不得”等要求表述的文件。")
     if len(clauses) > 500:
         raise ValueError("第一版每次最多核验 500 条要求，请拆分需求文件。")

@@ -1,0 +1,226 @@
+[
+  {
+    "id": "library-en",
+    "requirement": "Library kiosks must issue printed borrowing receipts.\nThe building has two entrances.",
+    "gold": [
+      {
+        "text": "Library kiosks must issue printed borrowing receipts.",
+        "evidence": [
+          1
+        ]
+      }
+    ],
+    "response": [
+      "Opening hours are posted at the entrance.",
+      "Library kiosks issue printed borrowing receipts after checkout."
+    ]
+  },
+  {
+    "id": "museum-zh",
+    "requirement": "语音导览必须提供儿童讲解模式。\n展厅共分为三个区域。",
+    "gold": [
+      {
+        "text": "语音导览必须提供儿童讲解模式。",
+        "evidence": [
+          0
+        ]
+      }
+    ],
+    "response": [
+      "语音导览提供儿童讲解模式，可在入口选择。",
+      "展品标签使用双语排版。"
+    ]
+  },
+  {
+    "id": "coldchain-en",
+    "requirement": "Cold storage must maintain a temperature below 5 degrees Celsius.",
+    "gold": [
+      {
+        "text": "Cold storage must maintain a temperature below 5 degrees Celsius.",
+        "evidence": [
+          0
+        ]
+      }
+    ],
+    "response": [
+      "Cold storage maintains a temperature of 8 degrees Celsius.",
+      "Shipment labels carry a barcode."
+    ]
+  },
+  {
+    "id": "irrigation-zh",
+    "requirement": "灌溉控制器应支持土壤湿度低于阈值时启动喷淋。",
+    "gold": [
+      {
+        "text": "灌溉控制器应支持土壤湿度低于阈值时启动喷淋。",
+        "evidence": [
+          1
+        ]
+      }
+    ],
+    "response": [
+      "泵站外壳采用金属材质。",
+      "灌溉控制器在土壤湿度低于阈值时启动喷淋。"
+    ]
+  },
+  {
+    "id": "textile-en",
+    "requirement": "The loom shall detect broken threads and stop automatically.",
+    "gold": [
+      {
+        "text": "The loom shall detect broken threads and stop automatically.",
+        "evidence": [
+          0,
+          1
+        ]
+      }
+    ],
+    "response": [
+      "Optical sensors detect broken threads on the loom.",
+      "The loom stops automatically when a thread-break signal is received."
+    ]
+  },
+  {
+    "id": "transit-zh",
+    "requirement": "站台应提供轮椅无障碍通道。",
+    "gold": [
+      {
+        "text": "站台应提供轮椅无障碍通道。",
+        "evidence": [
+          0
+        ]
+      }
+    ],
+    "response": [
+      "站台暂不提供轮椅无障碍通道，改造尚未完成。",
+      "时刻表安装于候车区。"
+    ]
+  },
+  {
+    "id": "booking-en-paraphrase",
+    "requirement": "Guests must be able to amend their arrival date.",
+    "gold": [
+      {
+        "text": "Guests must be able to amend their arrival date.",
+        "evidence": [
+          0
+        ]
+      }
+    ],
+    "response": [
+      "Travelers can reschedule check-in through the booking portal.",
+      "Breakfast is served at seven."
+    ]
+  },
+  {
+    "id": "energy-zh-paraphrase",
+    "requirement": "电表应支持远程抄读。",
+    "gold": [
+      {
+        "text": "电表应支持远程抄读。",
+        "evidence": [
+          0
+        ]
+      }
+    ],
+    "response": [
+      "管理人员可经网络获取计量终端的累计用量。",
+      "设备外壳为阻燃材料。"
+    ]
+  },
+  {
+    "id": "cafeteria-en-missing",
+    "requirement": "Menus must identify peanut allergens.",
+    "gold": [
+      {
+        "text": "Menus must identify peanut allergens.",
+        "evidence": []
+      }
+    ],
+    "response": [
+      "Lunch is served from noon.",
+      "Tables are cleaned after each service."
+    ]
+  },
+  {
+    "id": "archive-zh-missing",
+    "requirement": "档案室必须配备自动灭火装置。",
+    "gold": [
+      {
+        "text": "档案室必须配备自动灭火装置。",
+        "evidence": []
+      }
+    ],
+    "response": [
+      "借阅申请在前台登记。",
+      "阅览区设有照明灯具。"
+    ]
+  },
+  {
+    "id": "compound-en",
+    "requirement": "The ferry must display departure times. The ferry must announce delays.",
+    "gold": [
+      {
+        "text": "The ferry must display departure times.",
+        "evidence": [
+          0
+        ]
+      },
+      {
+        "text": "The ferry must announce delays.",
+        "evidence": [
+          1
+        ]
+      }
+    ],
+    "response": [
+      "The ferry displays departure times on the pier.",
+      "The ferry announces delays over loudspeakers."
+    ]
+  },
+  {
+    "id": "compound-zh",
+    "requirement": "快递柜必须提供取件凭证。快递柜必须记录格口占用情况。",
+    "gold": [
+      {
+        "text": "快递柜必须提供取件凭证。",
+        "evidence": [
+          0
+        ]
+      },
+      {
+        "text": "快递柜必须记录格口占用情况。",
+        "evidence": [
+          1
+        ]
+      }
+    ],
+    "response": [
+      "快递柜提供电子取件凭证。",
+      "快递柜记录格口占用情况。"
+    ]
+  },
+  {
+    "id": "implicit-en",
+    "requirement": "Available seats appear on the carriage display.",
+    "gold": [
+      {
+        "text": "Available seats appear on the carriage display.",
+        "evidence": [
+          0
+        ]
+      }
+    ],
+    "response": [
+      "The carriage display shows available seats."
+    ]
+  },
+  {
+    "id": "background-zh",
+    "requirement": "本项目位于北区，服务对象为园区访客。",
+    "gold": [],
+    "response": [
+      "接待地点为园区北门。"
+    ]
+  }
+]

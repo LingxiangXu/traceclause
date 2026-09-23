@@ -1,0 +1,270 @@
+{
+  "engine": "char-bm25-v1",
+  "documents": 14,
+  "gold_requirements": 15,
+  "extracted_requirements": 13,
+  "extraction_exact_precision": 0.9230769230769231,
+  "extraction_exact_recall": 0.8,
+  "exact_source_span_rate": 1.0,
+  "retrieval_gold_queries": 13,
+  "retrieval_hit_at_1": 0.8461538461538461,
+  "retrieval_macro_recall_at_3": 0.8461538461538461,
+  "missing_cases": 2,
+  "missing_detection_rate": 1.0,
+  "limitations": "Synthetic, authored separately from v0.1 demos; frozen without engine tuning. Not independent expert annotation or production validation. Text fixtures only; no OCR/layout benchmark.",
+  "cases": [
+    {
+      "id": "library-en",
+      "extracted": [
+        "Library kiosks must issue printed borrowing receipts."
+      ],
+      "retrieval": [
+        {
+          "requirement": "Library kiosks must issue printed borrowing receipts.",
+          "expected": [
+            1
+          ],
+          "retrieved": [
+            1
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "museum-zh",
+      "extracted": [
+        "语音导览必须提供儿童讲解模式。"
+      ],
+      "retrieval": [
+        {
+          "requirement": "语音导览必须提供儿童讲解模式。",
+          "expected": [
+            0
+          ],
+          "retrieved": [
+            0
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "coldchain-en",
+      "extracted": [
+        "Cold storage must maintain a temperature below 5 degrees Celsius."
+      ],
+      "retrieval": [
+        {
+          "requirement": "Cold storage must maintain a temperature below 5 degrees Celsius.",
+          "expected": [
+            0
+          ],
+          "retrieved": [
+            0,
+            1
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "irrigation-zh",
+      "extracted": [
+        "灌溉控制器应支持土壤湿度低于阈值时启动喷淋。"
+      ],
+      "retrieval": [
+        {
+          "requirement": "灌溉控制器应支持土壤湿度低于阈值时启动喷淋。",
+          "expected": [
+            1
+          ],
+          "retrieved": [
+            1
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "textile-en",
+      "extracted": [
+        "The loom shall detect broken threads and stop automatically."
+      ],
+      "retrieval": [
+        {
+          "requirement": "The loom shall detect broken threads and stop automatically.",
+          "expected": [
+            0,
+            1
+          ],
+          "retrieved": [
+            0,
+            1
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "transit-zh",
+      "extracted": [
+        "站台应提供轮椅无障碍通道。"
+      ],
+      "retrieval": [
+        {
+          "requirement": "站台应提供轮椅无障碍通道。",
+          "expected": [
+            0
+          ],
+          "retrieved": [
+            0
+          ],
+          "status": "conflict"
+        }
+      ]
+    },
+    {
+      "id": "booking-en-paraphrase",
+      "extracted": [
+        "Guests must be able to amend their arrival date."
+      ],
+      "retrieval": [
+        {
+          "requirement": "Guests must be able to amend their arrival date.",
+          "expected": [
+            0
+          ],
+          "retrieved": [],
+          "status": "missing"
+        }
+      ]
+    },
+    {
+      "id": "energy-zh-paraphrase",
+      "extracted": [
+        "电表应支持远程抄读。"
+      ],
+      "retrieval": [
+        {
+          "requirement": "电表应支持远程抄读。",
+          "expected": [
+            0
+          ],
+          "retrieved": [],
+          "status": "missing"
+        }
+      ]
+    },
+    {
+      "id": "cafeteria-en-missing",
+      "extracted": [
+        "Menus must identify peanut allergens."
+      ],
+      "retrieval": [
+        {
+          "requirement": "Menus must identify peanut allergens.",
+          "expected": [],
+          "retrieved": [],
+          "status": "missing"
+        }
+      ]
+    },
+    {
+      "id": "archive-zh-missing",
+      "extracted": [
+        "档案室必须配备自动灭火装置。"
+      ],
+      "retrieval": [
+        {
+          "requirement": "档案室必须配备自动灭火装置。",
+          "expected": [],
+          "retrieved": [],
+          "status": "missing"
+        }
+      ]
+    },
+    {
+      "id": "compound-en",
+      "extracted": [
+        "The ferry must display departure times. The ferry must announce delays."
+      ],
+      "retrieval": [
+        {
+          "requirement": "The ferry must display departure times.",
+          "expected": [
+            0
+          ],
+          "retrieved": [
+            0,
+            1
+          ],
+          "status": "candidate"
+        },
+        {
+          "requirement": "The ferry must announce delays.",
+          "expected": [
+            1
+          ],
+          "retrieved": [
+            1,
+            0
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "compound-zh",
+      "extracted": [
+        "快递柜必须提供取件凭证。",
+        "快递柜必须记录格口占用情况。"
+      ],
+      "retrieval": [
+        {
+          "requirement": "快递柜必须提供取件凭证。",
+          "expected": [
+            0
+          ],
+          "retrieved": [
+            0,
+            1
+          ],
+          "status": "candidate"
+        },
+        {
+          "requirement": "快递柜必须记录格口占用情况。",
+          "expected": [
+            1
+          ],
+          "retrieved": [
+            1,
+            0
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "implicit-en",
+      "extracted": [],
+      "retrieval": [
+        {
+          "requirement": "Available seats appear on the carriage display.",
+          "expected": [
+            0
+          ],
+          "retrieved": [
+            0
+          ],
+          "status": "candidate"
+        }
+      ]
+    },
+    {
+      "id": "background-zh",
+      "extracted": [],
+      "retrieval": []
+    }
+  ]
+}

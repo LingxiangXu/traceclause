@@ -1,92 +1,96 @@
 # API examples
 
-These examples describe v0.1.0 at `http://127.0.0.1:8765`. Interactive documentation is at `/docs` and the schema at `/openapi.json`. This local-only release has no authentication.
+These examples describe v0.2.0 at http://127.0.0.1:8765. Interactive documentation is at /docs and the schema at /openapi.json. This local-only release has no authentication.
 
-Run commands from the project directory. Examples use Bash; in Windows PowerShell use `curl.exe` and combine multiline commands into one line.
+Commands use Bash; in PowerShell use curl.exe and combine multiline commands into one line. Read the actual task revision and IDs before mutations.
 
-## Health
+## Create and inspect
 
-```bash
+~~~bash
 curl http://127.0.0.1:8765/api/health
-```
-
-```json
-{"status":"ok","version":"0.1.0","engine":"char-bm25-v1"}
-```
-
-## Create a demo task
-
-```bash
 curl -X POST http://127.0.0.1:8765/api/demo
-```
-
-Returns HTTP 201 and a complete session. Every call creates a new task. Replace `SESSION_ID` below with the returned `id`.
-
-## Import files
-
-```bash
 curl -X POST http://127.0.0.1:8765/api/sessions \
   -F "requirement=@traceclause/samples/requirements.md" \
   -F "response=@traceclause/samples/response.md"
-```
-
-Both fields are required file uploads. See the [user guide](user-guide.md) for limits. The response has the same structure as a demo task.
-
-## List and inspect tasks
-
-```bash
 curl http://127.0.0.1:8765/api/sessions
 curl http://127.0.0.1:8765/api/sessions/SESSION_ID
-```
+~~~
 
-The list returns identifiers, creation times, filenames, clause counts and reviewed counts. A full snapshot contains:
+Health returns version 0.2.0 and engine char-bm25-v1. Each demo/import creates an independent task with HTTP 201. Readable documents with zero extracted requirements are accepted for manual completion; textless/invalid documents still fail.
 
-| Field | Meaning |
+| Snapshot field | Meaning |
 | --- | --- |
-| id / created_at / revision | Identifier, UTC creation time and revision |
-| engine | Engine version used at task creation |
-| requirement / response | Filename, SHA-256, source blocks and parsing warnings |
-| rows[].clause | Requirement text, block, location and character offsets |
-| rows[].status / reason | Automatic hint category and explanation |
-| rows[].candidates | Quotations, block_id, score, lexical coverage and shared terms |
-| rows[].review | Human decision, note and evidence_id |
-| audit | Timestamp, clause identifier and before/after review values |
+| id / created_at / revision | Identifier, UTC creation time and transaction revision |
+| schema_version | 2 after additive normalization |
+| engine | Retrieval engine |
+| requirement / response | Filename, SHA-256, parsed blocks and warnings |
+| rows[].clause | Stable id, current text, block_id, location, start/end, source_text, origin and version |
+| rows[].clause.parent_id | Present on split children; retained through later edits |
+| rows[].superseded_by | Child IDs for archived split parents; empty for active rows |
+| rows[].status / reason / candidates | Automatic hint and retrieved evidence |
+| rows[].review | Decision, note, evidence_ids and legacy evidence_id |
+| audit | UTC at, kind (add/edit/split/review), clause_id and full before/after values |
 
-## Save a review
+Clause IDs are zero-based and stable, not array positions. UI labels add one (id 0 is REQ-001). Filter out nonempty superseded_by for active lists/counts. Old audit events may omit kind and represent reviews.
 
-```bash
+## Save multiple evidence passages
+
+~~~bash
 curl -X PUT http://127.0.0.1:8765/api/sessions/SESSION_ID/reviews/0 \
   -H "Content-Type: application/json" \
-  -d '{"revision":0,"decision":"supported","note":"The source explicitly describes Excel batch import.","evidence_id":0}'
-```
+  -H "Accept-Language: en" \
+  -d '{"revision":0,"decision":"partial","note":"Two passages cover different parts; constraints still need review.","evidence_ids":[0,1]}'
+~~~
 
-This example applies to the first clause of a newly created, unmodified demo. Read the current revision, clause.id and response.blocks[].id for real requests instead of assuming zero.
+- Decisions: pending, supported, partial, unsupported, missing, excluded.
+- Supported, partial and unsupported require at least one valid response block ID.
+- Non-pending decisions require a nonblank note, maximum 2,000 characters.
+- At most 100 evidence IDs; duplicates are removed while preserving order. Any response block may be selected.
+- Legacy evidence_id is accepted when evidence_ids is absent. Supplying both non-null is rejected. Returned evidence_id mirrors the first selected passage for older clients; use evidence_ids for complete coverage.
+- Success returns the updated snapshot and increments revision once. HTTP 409 means fetch, inspect and explicitly reconcile before retrying.
 
-- decision: `pending`, `supported`, `partial`, `unsupported`, `missing` or `excluded`.
-- supported, partial and unsupported require a valid evidence_id.
-- Every non-pending decision requires a nonempty note, up to 2,000 characters.
-- evidence_id can reference any response block, not just retrieved candidates.
-- Success returns the updated session, increments revision and appends an audit event.
-- On HTTP 409, fetch and inspect the latest snapshot before deciding what to submit.
+## Add, edit and split requirements
 
-## Export and download
+These are independent request examples, not a sequence: replace revision and source spans with current values.
 
-```bash
-curl -o review.md "http://127.0.0.1:8765/api/sessions/SESSION_ID/export?format=md"
-curl -o review.csv "http://127.0.0.1:8765/api/sessions/SESSION_ID/export?format=csv"
+~~~bash
+curl -X POST http://127.0.0.1:8765/api/sessions/SESSION_ID/clauses \
+  -H "Content-Type: application/json" \
+  -d '{"revision":0,"block_id":0,"start":0,"end":5,"text":"Human-corrected requirement linked to this quotation."}'
+
+curl -X PATCH http://127.0.0.1:8765/api/sessions/SESSION_ID/clauses/0 \
+  -H "Content-Type: application/json" \
+  -d '{"revision":0,"text":"Revised requirement wording."}'
+
+curl -X POST http://127.0.0.1:8765/api/sessions/SESSION_ID/clauses/0/split \
+  -H "Content-Type: application/json" \
+  -d '{"revision":0,"parts":["The system must record user actions.","The system must filter actions by operator."]}'
+~~~
+
+Add returns HTTP 201; edit/split return 200. All return a full snapshot. start/end count Unicode code points within the requirements block, zero-based with exclusive end. The range must select nonblank source text. Requirement text is trimmed and limited to 1–4,000 characters.
+
+Editing preserves the exact original source span and quotation, increments clause version, reretrieves evidence and resets only that review. An unchanged-text edit returns 422 without incrementing revision.
+
+Splitting accepts 2–20 distinct nonblank parts, archives the parent with its prior review, and creates children with inherited source spans and pending decisions. No active clause IDs are reused. Parent mutation endpoints return 404 after splitting. Add/split enforce 500 active requirements; failed requests do not partially modify a task.
+
+## Reports and original files
+
+~~~bash
+curl -o review.md "http://127.0.0.1:8765/api/sessions/SESSION_ID/export?format=md&lang=en"
+curl -o review.csv "http://127.0.0.1:8765/api/sessions/SESSION_ID/export?format=csv&lang=zh"
 curl -o review.json "http://127.0.0.1:8765/api/sessions/SESSION_ID/export?format=json"
 curl -OJ http://127.0.0.1:8765/api/sessions/SESSION_ID/source/requirement
 curl -OJ http://127.0.0.1:8765/api/sessions/SESSION_ID/source/response
-```
+~~~
 
-CSV is UTF-8 with a BOM. JSON excludes original binary bytes; use the source endpoints for those. Run downloads in a separate directory to avoid filename collisions.
+lang accepts en/zh, default zh for v0.1 compatibility. Markdown/CSV translate system labels only. JSON is the full language-neutral saved snapshot, including archived parents, without original binary bytes. Browser drafts are never sent to these exports. Run downloads in a separate directory to avoid collisions.
 
 ## Errors
 
 | Status | Cause |
 | --- | --- |
-| 404 | Unknown task or clause |
+| 404 | Unknown task, clause or archived parent mutation |
 | 409 | Stale revision |
-| 422 | Invalid upload, extraction failure, invalid fields, missing evidence or rationale |
+| 422 | Invalid file, source span, split parts, fields, capacity, evidence or rationale |
 
-Business errors usually return `{"detail":"Error description"}`; parameter validation may return an array as detail. Handle both. Current application-generated messages are Chinese.
+Business errors use a string detail. Framework field-validation errors may use an array; handle both. Send Accept-Language: en for English business errors; Chinese is the default. Framework validation text follows FastAPI/Pydantic defaults.
